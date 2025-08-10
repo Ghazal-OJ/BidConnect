@@ -1,23 +1,21 @@
-import React, { createContext, useState, useContext } from 'react';
+import { createContext, useContext, useState } from "react";
+const Ctx = createContext(null);
+export const useAuth = () => useContext(Ctx);
 
-const AuthContext = createContext();
+export function AuthProvider({ children }) {
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [user, setUser]   = useState(() => JSON.parse(localStorage.getItem("user")||"null"));
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  const login = (userData) => {
-    setUser(userData);
-  };
-
-  const logout = () => {
-    setUser(null);
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => useContext(AuthContext);
+  function login(data) {
+    setToken(data.token);
+    setUser(data.user);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+  }
+  function logout() {
+    setToken(null); setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }
+  return <Ctx.Provider value={{ token, user, login, logout }}>{children}</Ctx.Provider>;
+}

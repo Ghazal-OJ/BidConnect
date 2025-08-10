@@ -1,32 +1,31 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Profile from "./pages/Profile";
-import Tasks from "./pages/Tasks";
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Projects from './pages/Projects';
+import NewProject from './pages/NewProject';
+import ProjectDetails from './pages/ProjectDetails';
+import { useAuth } from './context/AuthContext';
 
-import HomePage from "./pages/HomePage";
-import ProjectForm from "./pages/ProjectForm";
-import ProjectList from "./pages/ProjectList";
-import ProjectDetails from "./pages/ProjectDetails";
-
-function App() {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/projects" element={<ProjectList />} />
-        <Route path="/projects/new" element={<ProjectForm />} />
-        <Route path="/projects/:id" element={<ProjectDetails />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/tasks" element={<Tasks />} />
-      </Routes>
-    </Router>
-  );
+function Protected({ children }) {
+  const { token } = useAuth();
+  return token ? children : <Navigate to="/login" replace />;
 }
 
-export default App;
+export default function App(){
+  return (
+    <>
+      <Navbar />
+      <div className="p-4">
+        <Routes>
+          <Route path="/" element={<Projects />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/new" element={<Protected><NewProject /></Protected>} />
+          <Route path="/projects/:id" element={<Protected><ProjectDetails /></Protected>} />
+        </Routes>
+      </div>
+    </>
+  );
+}

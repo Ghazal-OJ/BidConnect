@@ -1,44 +1,28 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const Navbar = () => {
+export default function Navbar(){
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   return (
-    <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">
-      <Link to="/" className="text-2xl font-bold">Task Manager</Link>
-      <div>
+    <nav className="flex gap-4 p-3 border-b">
+      <Link to="/">BidConnect</Link>
+      <Link to="/projects">Projects</Link>
+      {user?.role === 'client' && <Link to="/projects/new">Post a Project</Link>}
+      <div className="ml-auto">
         {user ? (
           <>
-            <Link to="/tasks" className="mr-4">Tasks</Link>
-            <Link to="/profile" className="mr-4">Profile</Link>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 px-4 py-2 rounded hover:bg-red-700"
-            >
-              Logout
-            </button>
+            <span className="mr-3">Hi, {user.name}</span>
+            <button onClick={logout} className="px-3 py-1 border rounded">Logout</button>
           </>
         ) : (
           <>
-            <Link to="/login" className="mr-4">Login</Link>
-            <Link
-              to="/register"
-              className="bg-green-500 px-4 py-2 rounded hover:bg-green-700"
-            >
-              Register
-            </Link>
+            <Link to="/login">Login</Link>
+            <span className="mx-1">|</span>
+            <Link to="/register">Register</Link>
           </>
         )}
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
