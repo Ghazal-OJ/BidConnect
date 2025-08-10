@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import api from '../axiosConfig'; // همون axiosInstance
+import { useNavigate, Link } from 'react-router-dom';
+import api from '../axiosConfig';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -13,10 +13,9 @@ const Login = () => {
     e.preventDefault();
     setErr('');
     try {
-      // چون baseURL = http://localhost:5001/api است، این می‌شود /api/auth/login
       const { data } = await api.post('/auth/login', formData);
-      login(data); // { token, user }
-      navigate('/projects'); // اگر مسیر دیگری داری، همونو بذار
+      login(data);
+      navigate('/projects');
     } catch (error) {
       setErr(error.response?.data?.error || 'Login failed. Please try again.');
     }
@@ -27,6 +26,7 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded">
         <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
         {err && <p className="mb-3 text-red-600">{err}</p>}
+        
         <input
           type="email"
           placeholder="Email"
@@ -35,14 +35,23 @@ const Login = () => {
           className="w-full mb-4 p-2 border rounded"
           required
         />
+
         <input
           type="password"
           placeholder="Password"
           value={formData.password}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-2 p-2 border rounded"
           required
         />
+
+        {/* لینک فراموشی رمز */}
+        <div className="text-right mb-4">
+          <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
+            Forgot password?
+          </Link>
+        </div>
+
         <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
           Login
         </button>

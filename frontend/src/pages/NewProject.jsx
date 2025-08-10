@@ -3,47 +3,90 @@ import { useNavigate } from 'react-router-dom';
 import api from '../axiosConfig';
 import { useAuth } from '../context/AuthContext';
 
-export default function NewProject(){
-  const nav = useNavigate();
-  const { user } = useAuth();
-  const [form, setForm] = useState({ title:'', desc:'', budget:'', deadline:'' });
+export default function NewProject() {
+  const { token, user } = useAuth();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    title: '',
+    description: '',   // ← مهم: نام دقیق فیلد
+    budget: '',
+    deadline: '',
+  });
   const [err, setErr] = useState('');
 
   if (user?.role !== 'client') {
-    return <p className="text-red-600">Only clients can post projects.</p>;
+    return <p className="text-red-600">403 — Only clients can post projects.</p>;
   }
 
-  async function submit(e){
-    e.preventDefault(); setErr('');
-    try{
-      const payload = { ...form, budget: form.budget? Number(form.budget): null, deadline: form.deadline || null };
-      await api.post('/projects', payload);
-      nav('/projects');
-    }catch(e){ setErr(e.response?.data?.error || 'Failed to create project'); }
+  async function submit(e) {
+    e.preventDefault();
+    setErr('');
+    try {
+      await api.post(
+        '/projects',
+        {
+          title: form.title,
+          description: form.description,           // ← این کلید باید همین باشد
+          budget: form.budget ? Number(form.budget) : undefined,
+          deadline: form.deadline || undefined,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      navigate('/projects');
+    } catch (e) {
+      setErr(e.response?.data?.error || 'Failed to create project');
+    }
   }
 
   return (
-    <form onSubmit={submit} className="max-w-lg mx-auto p-6 bg-white rounded shadow">
-      <h2 className="text-xl font-bold mb-4">Post a Project</h2>
-      {err && <p className="text-red-600 mb-3">{err}</p>}
+    <div className="max-w-xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">Post a Project</h2>
+      {err && <p className="mb-3 text-red-600">{err}</p>}
 
-      <label className="block mb-1">Title</label>
-      <input className="w-full p-2 border rounded mb-3" value={form.title}
-        onChange={e=>setForm({...form, title:e.target.value})} required />
+      <form onSubmit={submit} className="space-y-3">
+        <div>
+          <label className="block text-sm mb-1">Title</label>
+          <input
+            className="w-full p-2 border rounded"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            required
+          />
+        </div>
 
-      <label className="block mb-1">Description</label>
-      <textarea className="w-full p-2 border rounded mb-3" value={form.desc}
-        onChange={e=>setForm({...form, desc:e.target.value})} />
+        <div>
+          <label className="block text-sm mb-1">Description</label>
+          <textarea
+            className="w-full p-2 border rounded"
+            rows={4}
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            required
+          />
+        </div>
 
-      <label className="block mb-1">Budget</label>
-      <input type="number" className="w-full p-2 border rounded mb-3" value={form.budget}
-        onChange={e=>setForm({...form, budget:e.target.value})} />
+        <div>
+          <label className="block text-sm mb-1">Budget</label>
+          <input
+            type="number"
+            className="w-full p-2 border rounded"
+            value={form.budget}
+            onChange={(e) => setForm({ ...form, budget: e.target.value })}
+          />
+        </div>
 
-      <label className="block mb-1">Deadline</label>
-      <input type="date" className="w-full p-2 border rounded mb-4" value={form.deadline}
-        onChange={e=>setForm({...form, deadline:e.target.value})} />
+        <div>
+          <label className="block text-sm mb-1">Deadline</label>
+          <input
+            type="date"
+            className="w-full p-2 border rounded"
+            value={form.deadline}
+            onChange={(e) => setForm({ ...form, deadline: e.target.value })}
+          />
+        </div>
 
-      <button className="w-full bg-blue-600 text-white p-2 rounded">Create</button>
-    </form>
+        <button className="w-full bg-blue-600 text-white p-2 rounded">Create</button>
+      </form>
+    </div>
   );
 }
