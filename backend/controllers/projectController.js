@@ -1,6 +1,9 @@
 const Project = require('../models/Project');
 
-// CREATE (owner = req.user.id)
+/**
+ * Create a new project.
+ * - Owner is always set to the currently logged-in user.
+ */
 exports.createProject = async (req, res) => {
   try {
     const payload = { ...req.body, owner: req.user.id };
@@ -11,7 +14,10 @@ exports.createProject = async (req, res) => {
   }
 };
 
-// LIST (public)
+/**
+ * Get a list of all projects (public endpoint).
+ * - Sorted by newest first.
+ */
 exports.listProjects = async (req, res) => {
   try {
     const items = await Project.find().sort({ createdAt: -1 });
@@ -21,7 +27,9 @@ exports.listProjects = async (req, res) => {
   }
 };
 
-// GET ONE (public)
+/**
+ * Get one project by its ID (public endpoint).
+ */
 exports.getProject = async (req, res) => {
   try {
     const item = await Project.findById(req.params.id);
@@ -32,12 +40,16 @@ exports.getProject = async (req, res) => {
   }
 };
 
-// UPDATE (only owner or admin)
+/**
+ * Update a project.
+ * - Only the project owner or an admin can update.
+ */
 exports.updateProject = async (req, res) => {
   try {
     const item = await Project.findById(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
 
+    // Check if the user is authorized
     if (item.owner.toString() !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Forbidden' });
     }
@@ -50,12 +62,16 @@ exports.updateProject = async (req, res) => {
   }
 };
 
-// DELETE (only owner or admin)
+/**
+ * Delete a project.
+ * - Only the project owner or an admin can delete.
+ */
 exports.deleteProject = async (req, res) => {
   try {
     const item = await Project.findById(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
 
+    // Check if the user is authorized
     if (item.owner.toString() !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Forbidden' });
     }
