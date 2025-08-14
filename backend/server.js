@@ -1,9 +1,10 @@
-// server.js
+// backend/server.js
 require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const mongoose = require('mongoose');
 
 const connectDB = require('./config/db');
 
@@ -12,42 +13,41 @@ const authRoutes      = require('./routes/authRoutes');
 const taskRoutes      = require('./routes/taskRoutes');
 const bidRoutes       = require('./routes/bidRoutes');
 const projectRoutes   = require('./routes/projectRoutes');
-const uploadsRouter   = require('./routes/uploads');         // file uploads (multer)
-const portfolioRoutes = require('./routes/portfolioRoutes'); // freelancer portfolio
+const uploadsRouter   = require('./routes/uploads');          // file uploads (multer)
+const portfolioRoutes = require('./routes/portfolioRoutes');  // freelancer portfolio
 
 const app = express();
 
 /* ---------- Middleware ---------- */
-// Allow frontend to call this API
+// CORS برای فرانت
 app.use(cors({ origin: true, credentials: true }));
-// Parse JSON bodies
+// JSON parser
 app.use(express.json({ limit: '10mb' }));
 
-// Serve uploaded files statically: http://localhost:5001/uploads/<filename>
+// فایل‌های آپلود‌شده
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 /* ---------- API Routes ---------- */
-// Auth, tasks, bids
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/bids', bidRoutes);
-
-// Projects (public reads; create/update/delete are protected in the router)
 app.use('/api/projects', projectRoutes);
-
-// Uploads (exposes POST /api/uploads and GET /api/uploads/ping)
 app.use('/', uploadsRouter);
-
-// Portfolio (freelancer: GET/PUT /api/portfolio/me)
 app.use('/api/portfolio', portfolioRoutes);
 
-// Simple health check
+// health check
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
-/* ---------- Start Server (only when run directly) ---------- */
+/* ---------- Start Server ---------- */
 if (require.main === module) {
   connectDB()
     .then(() => {
+      // لاگِ قطعی اتصال به دیتابیس
+      mongoose.connection.once('open', () => {
+        console.log('Mongo connected name:', mongoose.connection.name); // ← باید Ghazal_OJ_DATABASE باشد
+        console.log('Mongo host:', mongoose.connection.host);
+      });
+
       const PORT = process.env.PORT || 5001;
       app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     })

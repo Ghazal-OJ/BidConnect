@@ -1,63 +1,75 @@
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../axiosConfig';
+import { useAuth } from '../context/AuthContext';
 
-const Login = () => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const { login } = useAuth();
-  const navigate = useNavigate();
+export default function Login() {
+  const [form, setForm] = useState({ email: '', password: '' });
   const [err, setErr] = useState('');
+  const [loading, setLoading] = useState(false);
+  const nav = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = async (e) => {
+  async function submit(e) {
     e.preventDefault();
     setErr('');
+    setLoading(true);
     try {
-      const { data } = await api.post('/auth/login', formData);
-      login(data);
-      navigate('/projects');
-    } catch (error) {
-      setErr(error.response?.data?.error || 'Login failed. Please try again.');
+      console.log('[Login] submitting', form.email);
+      const { data } = await api.post('/auth/login', {
+        email: form.email.trim().toLowerCase(),
+        password: form.password
+      });
+      console.log('[Login] response', data);
+      login(data);                // AuthContext نسخه‌ی اصلاح‌شده هر دو فرمت پاسخ را می‌پذیرد
+      nav('/projects');
+    } catch (e) {
+      console.error('[Login] error', e?.response?.status, e?.response?.data || e.message);
+      const msg =
+        e?.response?.data?.message ||
+        e?.response?.data?.error ||
+        e?.message ||
+        'Login failed';
+      setErr(msg);
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="max-w-md mx-auto mt-20">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
-        {err && <p className="mb-3 text-red-600">{err}</p>}
-        
-        <input
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="w-full mb-4 p-2 border rounded"
-          required
-        />
+    <form onSubmit={submit} className="max-w-md mx-auto p-6 bg-white rounded shadow mt-10">
+      <h2 className="text-xl font-bold mb-4">Login</h2>
+      {err && <p className="text-red-600 mb-3">{err}</p>}
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          className="w-full mb-2 p-2 border rounded"
-          required
-        />
+      <input
+        className="w-full p-2 border rounded mb-3"
+        placeholder="Email"
+        type="email"
+        value={form.email}
+        onChange={e => setForm({ ...form, email: e.target.value })}
+        required
+      />
 
-        {/* لینک فراموشی رمز */}
-        <div className="text-right mb-4">
-          <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
-            Forgot password?
-          </Link>
-        </div>
+      <input
+        className="w-full p-2 border rounded mb-3"
+        placeholder="Password"
+        type="password"
+        value={form.password}
+        onChange={e => setForm({ ...form, password: e.target.value })}
+        required
+      />
 
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
-          Login
-        </button>
-      </form>
-    </div>
+      <div className="flex justify-between items-center mb-4">
+        <span />
+        <Link to="/forgot-password" className="text-sm text-blue-600">Forgot password?</Link>
+      </div>
+
+      <button
+        className="w-full bg-blue-600 text-white p-2 rounded disabled:opacity-60"
+        disabled={loading}
+      >
+        {loading ? 'Signing in…' : 'Login'}
+      </button>
+    </form>
   );
-};
-
-export default Login;
+}

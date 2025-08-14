@@ -1,38 +1,55 @@
-// controllers/portfolioController.js
-const User = require('../models/User');
+const Portfolio = require('../models/Portfolio');
 
-// Return the logged-in freelancer's portfolio
-exports.getMyPortfolio = async (req, res) => {
+// ایجاد آیتم پورتفولیو
+exports.createPortfolio = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('role portfolio');
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    if (user.role !== 'freelancer') {
-      return res.status(403).json({ message: 'Only freelancers can access portfolio' });
+    if (req.user.role !== 'freelancer') {
+      return res.status(403).json({ error: 'Only freelancers can create portfolio' });
     }
-    res.json(user.portfolio || {});
+    const portfolio = await Portfolio.create({ ...req.body, owner: req.user.id });
+    res.status(201).json(portfolio);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ error: err.message });
   }
 };
 
-// Update the logged-in freelancer's portfolio
-exports.updateMyPortfolio = async (req, res) => {
+// لیست پورتفولیوهای یک کاربر
+exports.getMyPortfolio = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('role portfolio');
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    if (user.role !== 'freelancer') {
-      return res.status(403).json({ message: 'Only freelancers can update portfolio' });
-    }
-
-    // Allow only safe fields
-    const { bio, skills, links } = req.body;
-    if (bio !== undefined) user.portfolio.bio = bio;
-    if (Array.isArray(skills)) user.portfolio.skills = skills;
-    if (Array.isArray(links)) user.portfolio.links = links;
-
-    await user.save();
-    res.json(user.portfolio);
+    const portfolios = await Portfolio.find({ owner: req.user.id });
+    res.json(portfolios);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// بروزرسانی پورتفولیو
+exports.updatePortfolio = async (req, res) => {
+  try {
+    const portfolio = await Portfolio.findById(req.params.id);
+    if (!portfolio) return res.status(404).json({ error: 'Portfolio not found' });
+    if (portfolio.owner.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    Object.assign(portfolio, req.body);
+    await portfolio.save();
+    res.json(portfolio);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// حذف پورتفولیو
+exports.deletePortfolio = async (req, res) => {
+  try {
+    const portfolio = await Portfolio.findById(req.params.id);
+    if (!portfolio) return res.status(404).json({ error: 'Portfolio not found' });
+    if (portfolio.owner.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    await portfolio.deleteOne();
+    res.json({ message: 'Portfolio deleted' });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 };

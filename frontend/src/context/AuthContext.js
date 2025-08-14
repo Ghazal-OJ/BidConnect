@@ -7,10 +7,12 @@ export function AuthProvider({ children }) {
   const [user, setUser]   = useState(() => JSON.parse(localStorage.getItem("user")||"null"));
 
   function login(data) {
-    setToken(data.token);
-    setUser(data.user);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    const token = data.token;
+    const user = data.user || { id: data.id, name: data.name, email: data.email };
+    setToken(token);
+    setUser(user);
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
   }
   function logout() {
     setToken(null); setUser(null);

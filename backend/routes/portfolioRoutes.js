@@ -1,13 +1,16 @@
-// routes/portfolioRoutes.js
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
-const requireRole = require('../middleware/roleMiddleware');
-const ctrl = require('../controllers/portfolioController');
+const {
+  createPortfolio,
+  getMyPortfolio,
+  updatePortfolio,
+  deletePortfolio
+} = require('../controllers/portfolioController');
 
-// Get my portfolio (freelancer only)
-router.get('/me', protect, requireRole('freelancer'), ctrl.getMyPortfolio);
-
-// Update my portfolio (freelancer only)
-router.put('/me', protect, requireRole('freelancer'), ctrl.updateMyPortfolio);
+router.post('/', protect, createPortfolio); // فقط فریلنسر
+router.get('/my', protect, getMyPortfolio); // فقط کاربر لاگین کرده
+router.put('/:id', protect, updatePortfolio);
+router.delete('/:id', protect, deletePortfolio);
 
 module.exports = router;
