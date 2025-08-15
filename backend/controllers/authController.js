@@ -8,11 +8,11 @@ const crypto = require('crypto');
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-// فقط دو نقش مجاز
+
 const ALLOWED_ROLES = ['employer', 'freelancer'];
 const normalizeRole = (r) => {
   const v = String(r || '').toLowerCase().trim();
-  return ALLOWED_ROLES.includes(v) ? v : 'freelancer'; // پیش‌فرض با مدل هماهنگ
+  return ALLOWED_ROLES.includes(v) ? v : 'freelancer'; 
 };
 
 // ========== POST /api/auth/register ==========
@@ -69,7 +69,7 @@ const getProfile = async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // پاسخ یکنواخت (بدون توکن)
+    
     return res.json({
       id: user.id,
       name: user.name,
@@ -94,9 +94,9 @@ const updateUserProfile = async (req, res) => {
     if (name !== undefined) user.name = String(name).trim() || user.name;
     if (email !== undefined) user.email = email || user.email;
 
-    // فقط فریلنسر اجازه‌ی ویرایش پورتفولیو دارد
+    
     if (user.role === 'freelancer' && req.body.portfolio && typeof req.body.portfolio === 'object') {
-      // ادغام امن
+     
       const current = (user.portfolio && user.portfolio.toObject && user.portfolio.toObject()) || user.portfolio || {};
       user.portfolio = { ...current, ...req.body.portfolio };
     }
@@ -129,7 +129,7 @@ const forgotPassword = async (req, res) => {
 
     const token = crypto.randomBytes(32).toString('hex');
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 1000 * 60 * 30; // 30 دقیقه
+    user.resetPasswordExpires = Date.now() + 1000 * 60 * 30; 
     await user.save();
 
     const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${token}`;
@@ -158,7 +158,7 @@ const resetPassword = async (req, res) => {
     });
     if (!user) return res.status(400).json({ error: 'Invalid or expired token' });
 
-    user.password = newPassword; // pre-save hook در مدل هش می‌کند
+    user.password = newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();

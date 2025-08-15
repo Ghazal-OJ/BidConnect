@@ -11,7 +11,7 @@ export default function Register() {
     name: '',
     email: '',
     password: '',
-    role: 'employer', // فقط 'employer' یا 'freelancer'
+    role: 'employer',
   });
 
   const [err, setErr] = useState('');
@@ -19,7 +19,7 @@ export default function Register() {
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    // اطمینان از lowercase بودن role
+    
     const v = name === 'role' ? value.toLowerCase() : value;
     setFormData((f) => ({ ...f, [name]: v }));
   };
@@ -30,7 +30,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      // فقط employer یا freelancer ارسال می‌شود
+      
       const payload = {
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),

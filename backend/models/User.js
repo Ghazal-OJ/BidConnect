@@ -1,12 +1,11 @@
-// models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 // Subdocument for freelancer portfolio
 const PortfolioSchema = new mongoose.Schema({
-  bio:   { type: String, default: '' },        // short about-me
-  skills: [{ type: String, trim: true }],      // tags like: 'React', 'Node'
-  links:  [{ label: String, url: String }],    // external links: github, behance, etc.
+  bio:   { type: String, default: '' },
+  skills: [{ type: String, trim: true }],
+  links:  [{ label: String, url: String }],
 }, { _id: false });
 
 const UserSchema = new mongoose.Schema({

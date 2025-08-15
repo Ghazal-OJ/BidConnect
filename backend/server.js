@@ -1,4 +1,3 @@
-// backend/server.js
 require('dotenv').config();
 
 const express = require('express');
@@ -14,17 +13,16 @@ const taskRoutes      = require('./routes/taskRoutes');
 const bidRoutes       = require('./routes/bidRoutes');
 const projectRoutes   = require('./routes/projectRoutes');
 const uploadsRouter   = require('./routes/uploads');          // file uploads (multer)
-const portfolioRoutes = require('./routes/portfolioRoutes');  // freelancer portfolio
+const portfolioRoutes = require('./routes/portfolioRoutes');  // freelancer portfolioComingsoon
 
 const app = express();
 
-/* ---------- Middleware ---------- */
-// CORS برای فرانت
+
 app.use(cors({ origin: true, credentials: true }));
 // JSON parser
 app.use(express.json({ limit: '10mb' }));
 
-// فایل‌های آپلود‌شده
+
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 /* ---------- API Routes ---------- */
@@ -42,9 +40,9 @@ app.get('/health', (_req, res) => res.json({ ok: true }));
 if (require.main === module) {
   connectDB()
     .then(() => {
-      // لاگِ قطعی اتصال به دیتابیس
+      
       mongoose.connection.once('open', () => {
-        console.log('Mongo connected name:', mongoose.connection.name); // ← باید Ghazal_OJ_DATABASE باشد
+        console.log('Mongo connected name:', mongoose.connection.name);
         console.log('Mongo host:', mongoose.connection.host);
       });
 

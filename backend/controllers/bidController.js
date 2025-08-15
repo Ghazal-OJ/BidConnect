@@ -1,11 +1,10 @@
-// backend/controllers/bidController.js
 const Bid = require('../models/Bid');
 const Project = require('../models/Project');
 
 // Submit bid (freelancer)
 exports.submitBid = async (req, res) => {
   try {
-    // دفاع دو لایه (علاوه بر requireRole در routes)
+    
     if (req.user.role !== 'freelancer') {
       return res.status(403).json({ error: 'Only freelancers can bid' });
     }
@@ -16,18 +15,18 @@ exports.submitBid = async (req, res) => {
     const project = await Project.findById(projectId);
     if (!project) return res.status(404).json({ error: 'Project not found' });
 
-    // مالک پروژه نمی‌تواند روی پروژه‌ی خودش Bid بدهد
+    
     if (project.owner.toString() === req.user.id) {
       return res.status(400).json({ error: 'Owner cannot bid on own project' });
     }
 
-    // جلوگیری از ثبت چندباره‌ی بید توسط همان فریلنسر (اختیاری ولی مفید)
+    
     const exists = await Bid.findOne({ project: projectId, bidder: req.user.id, status: { $in: ['Pending', 'Accepted', 'Declined'] } });
     if (exists) {
       return res.status(400).json({ error: 'You have already placed a bid for this project' });
     }
 
-    // اعتبارسنجی اولیه
+    
     const amt = Number(amount), d = Number(days);
     if (!amt || amt <= 0 || !d || d <= 0) {
       return res.status(400).json({ error: 'Invalid amount/days' });
@@ -55,7 +54,7 @@ exports.listBidsForProject = async (req, res) => {
     const project = await Project.findById(projectId).select('owner');
     if (!project) return res.status(404).json({ error: 'Project not found' });
 
-    // مالک پروژه: تمام بیدها
+   
     if (project.owner.toString() === req.user.id) {
       const bids = await Bid.find({ project: projectId })
         .sort({ amount: 1 })
@@ -63,7 +62,7 @@ exports.listBidsForProject = async (req, res) => {
       return res.json(bids);
     }
 
-    // فریلنسر: فقط بیدهای خودش
+    
     if (req.user.role === 'freelancer') {
       const bids = await Bid.find({ project: projectId, bidder: req.user.id })
         .sort({ amount: 1 })
@@ -71,7 +70,7 @@ exports.listBidsForProject = async (req, res) => {
       return res.json(bids);
     }
 
-    // سایرین: دسترسی ندارند
+    
     return res.status(403).json({ error: 'Forbidden' });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -130,12 +129,12 @@ exports.acceptBid = async (req, res) => {
     const project = bid.project;
     if (!project) return res.status(404).json({ error: 'Project not found' });
 
-    // فقط مالک پروژه
+    
     if (project.owner.toString() !== req.user.id) {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
-    // اگر قبلاً Award شده، جلوگیری کن
+    
     if (project.status === 'Awarded') {
       return res.status(400).json({ error: 'Project already awarded' });
     }
@@ -143,17 +142,17 @@ exports.acceptBid = async (req, res) => {
       return res.status(400).json({ error: 'Only pending bids can be accepted' });
     }
 
-    // پذیرش بید انتخابی
+    
     bid.status = 'Accepted';
     await bid.save();
 
-    // رد کردن بقیه‌ی بیدهای درحال انتظار
+    
     await Bid.updateMany(
       { project: project._id, _id: { $ne: bid._id }, status: 'Pending' },
       { $set: { status: 'Declined' } }
     );
 
-    // به‌روزرسانی پروژه
+    // UpdateProject
     project.status = 'Awarded';
     project.awardedBid = bid._id;
     await project.save();

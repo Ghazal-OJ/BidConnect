@@ -1,4 +1,3 @@
-// backend/controllers/projectController.js
 const Project = require('../models/Project');
 
 // create
@@ -8,7 +7,7 @@ exports.createProject = async (req, res) => {
       title: req.body.title,
       description: req.body.description,
       budget: req.body.budget,
-      owner: req.user.id, // سازنده = مالک
+      owner: req.user.id,
     };
     const project = await Project.create(payload);
     res.status(201).json(project);

@@ -21,7 +21,7 @@ export default function Login() {
         password: form.password
       });
       console.log('[Login] response', data);
-      login(data);                // AuthContext نسخه‌ی اصلاح‌شده هر دو فرمت پاسخ را می‌پذیرد
+      login(data);
       nav('/projects');
     } catch (e) {
       console.error('[Login] error', e?.response?.status, e?.response?.data || e.message);

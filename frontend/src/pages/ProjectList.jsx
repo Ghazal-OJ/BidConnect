@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../axiosConfig"; // اگر فایل axiosConfig.js داری؛ وگرنه از axios مستقیم استفاده کن
+import axios from "../axiosConfig";
 
 export default function ProjectList() {
   const [items, setItems] = useState([]);

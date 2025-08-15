@@ -9,7 +9,7 @@ const bidSchema = new mongoose.Schema({
   status:      { type: String, enum: ['Pending', 'Accepted', 'Declined', 'Withdrawn'], default: 'Pending' }
 }, { timestamps: true });
 
-// ❗️فقط وقتی status ∈ {Pending, Accepted} باشد «یکتا» باشد (یعنی بید فعال فقط یکی)
+
 bidSchema.index(
   { project: 1, bidder: 1 },
   { unique: true, partialFilterExpression: { status: { $in: ['Pending', 'Accepted'] } } }

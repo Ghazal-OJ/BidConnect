@@ -7,7 +7,7 @@ export default function NewProject() {
   const { user, token } = useAuth();
   const navigate = useNavigate();
 
-  // ✅ تمام هوک‌ها قبل از هر return
+  
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -17,7 +17,7 @@ export default function NewProject() {
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // ⛳️ گاردهای دسترسی — بعد از تعریف هوک‌ها
+  
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== 'employer') {
     return (
@@ -40,7 +40,7 @@ export default function NewProject() {
       };
 
       const { data } = await api.post('/projects', payload, {
-        // اگر axiosConfig توکن رو خودش اضافه می‌کنه، این هدر رو بردار
+       
         headers: { Authorization: `Bearer ${token}` },
       });
 

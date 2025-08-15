@@ -8,8 +8,8 @@ const {
   deletePortfolio
 } = require('../controllers/portfolioController');
 
-router.post('/', protect, createPortfolio); // فقط فریلنسر
-router.get('/my', protect, getMyPortfolio); // فقط کاربر لاگین کرده
+router.post('/', protect, createPortfolio);
+router.get('/my', protect, getMyPortfolio);
 router.put('/:id', protect, updatePortfolio);
 router.delete('/:id', protect, deletePortfolio);
 

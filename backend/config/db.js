@@ -1,4 +1,4 @@
-// backend/config/db.js
+
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
@@ -9,15 +9,12 @@ const connectDB = async () => {
   }
 
   try {
-    // اختیاری؛ برای حذف بعضی هشدارها:
-    // mongoose.set('strictQuery', true);
 
     const conn = await mongoose.connect(uri);
 
-    // لاگ‌های قطعی برای تشخیص اینکه دقیقاً به کجا وصل شدی
-    console.log('Mongo connected name:', conn.connection.name); // ← باید Ghazal_OJ_DATABASE باشه
-    console.log('Mongo host:', conn.connection.host);
-    console.log('Mongo readyState:', conn.connection.readyState); // 1 = connected
+    
+    console.log('Mongo connected name:', conn.connection.name); 
+    console.log('Mongo readyState:', conn.connection.readyState); 
 
     return conn;
   } catch (error) {

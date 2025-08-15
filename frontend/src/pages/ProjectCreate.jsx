@@ -34,7 +34,7 @@ export default function ProjectCreate() {
           : [],
         deadline: form.deadline || undefined,
       };
-      await api.post("/projects", payload); // نیاز به توکن دارد
+      await api.post("/projects", payload);
       navigate("/projects");
     } catch (err) {
       setError(err?.response?.data?.error || "Failed to create project");

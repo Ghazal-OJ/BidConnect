@@ -1,15 +1,20 @@
 import axios from 'axios';
 
-export const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-
 const api = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
+  baseURL: process.env.REACT_APP_API_URL
+    ? `${process.env.REACT_APP_API_URL}/api`
+    : 'http://localhost:5001/api',
 });
 
+// attach token automatically if exists in localStorage
 api.interceptors.request.use((config) => {
-  const t = localStorage.getItem('token');
-  if (t) config.headers.Authorization = `Bearer ${t}`;
+  const raw = localStorage.getItem('user'); // {token, user}
+  if (raw) {
+    try {
+      const { token } = JSON.parse(raw);
+      if (token) config.headers.Authorization = `Bearer ${token}`;
+    } catch {}
+  }
   return config;
 });
 

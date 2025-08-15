@@ -1,16 +1,11 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-/**
- * Simple AuthContext
- * - Keeps { user, token } in React state and localStorage
- * - Exposes login(user, token), logout()
- * - Helpers: isAuthed, isEmployer, isFreelancer
- */
+
 const AuthCtx = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);     // e.g. { _id, email, role }
-  const [token, setToken] = useState(null);   // JWT string
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
   // Load from localStorage on mount
   useEffect(() => {

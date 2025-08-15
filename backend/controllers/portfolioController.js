@@ -1,6 +1,6 @@
 const Portfolio = require('../models/Portfolio');
 
-// ایجاد آیتم پورتفولیو
+// portfolio-Commingsooooon
 exports.createPortfolio = async (req, res) => {
   try {
     if (req.user.role !== 'freelancer') {
@@ -13,7 +13,7 @@ exports.createPortfolio = async (req, res) => {
   }
 };
 
-// لیست پورتفولیوهای یک کاربر
+// Portfolio-list-ComingSooon
 exports.getMyPortfolio = async (req, res) => {
   try {
     const portfolios = await Portfolio.find({ owner: req.user.id });
@@ -23,7 +23,7 @@ exports.getMyPortfolio = async (req, res) => {
   }
 };
 
-// بروزرسانی پورتفولیو
+// UpdatingPORTFOLIO
 exports.updatePortfolio = async (req, res) => {
   try {
     const portfolio = await Portfolio.findById(req.params.id);
@@ -39,7 +39,7 @@ exports.updatePortfolio = async (req, res) => {
   }
 };
 
-// حذف پورتفولیو
+// DeletePortfolio
 exports.deletePortfolio = async (req, res) => {
   try {
     const portfolio = await Portfolio.findById(req.params.id);

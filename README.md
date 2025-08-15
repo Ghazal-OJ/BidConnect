@@ -1,26 +1,62 @@
-**Task Manager Application Overview:The task manager application is designed to help users efficiently manage their tasks and responsibilities by providing a user-friendly interface for creating, viewing, updating, and deleting tasks. It includes essential features such as secure user authentication, allowing individuals to sign up and log in to their accounts, as well as profile management to update personal information. With built-in validation such as input field validation and email validation, the application ensures a seamless user experience while enhancing productivity and organization in both personal and professional settings. **
+# BidConnect Platform
 
-**This apps **contain** the following features:**
+## 📖 Overview
 
-* Signup
-* Login
-* Logout
-* Update profile
-* Add tasks
-* View tasks
-* Update tasks
-* Delete tasks
+BidConnect is a **full-stack freelance project bidding platform** designed to connect **employers** who have projects with **freelancers** looking for work.  
+It streamlines the process of posting projects, receiving competitive bids, and hiring the right talent — all in a secure, role-based environment.
 
-**This **app**lication** is**almost **a** precompiled** app**. However, students will develop some features,**such as adding tasks, viewing tasks, updating tasks, and **deleting** tasks**. **Students** will interact with GitHub when they develop the features.**
+On the **employer** side, users can create detailed project listings with clear descriptions, budgets, and timelines. Employers can then review all bids submitted by freelancers, compare offers, and make informed hiring decisions.  
+
+On the **freelancer** side, users can browse available projects, submit tailored bids that include price, estimated delivery time, and a personalized cover letter. Freelancers can also view their own bid status for each project they’ve applied to.  
+
+The application is built with **React** for the frontend, **Node.js + Express** for the backend, and **MongoDB Atlas** for database storage.  
+Security is enforced using **JWT-based authentication** and **role-based access control (RBAC)**, ensuring that employers and freelancers have access only to the features relevant to their roles.
+
+BidConnect’s clean and modern interface ensures ease of use, while backend validations and error handling provide a smooth and reliable user experience. This makes it a great starting point for students and developers who want to explore **real-world full-stack development** patterns.
+
+---
+
+## Features
+
+### 🔹 Employer
+- **Sign Up / Login / Logout**
+- **Create and publish projects**
+- **Edit and delete own projects**
+- **View all bids for a project**
+
+### 🔹 Freelancer
+- **Sign Up / Login / Logout**
+- **Browse available projects**
+- **Submit bids with amount, delivery time, and cover letter**
+- **View own bid status for each project**
+- **Edit own bid before acceptance**
 
 ---
 
-**Prerequisite:** Please install the following software and create account in following web tools** **
+## Tech Stack
 
-* **Nodejs [**[https://nodejs.org/en](https://nodejs.org/en)]** **
-* **Git [**[https://git-scm.com/](https://git-scm.com/)]** **
-* **VS code editor** [[https://code.visualstudio.com/](https://code.visualstudio.com/)]** **
-* **MongoDB Account** [[https://account.mongodb.com/account/login](https://account.mongodb.com/account/login)]** - In tutorial, we have also showed how can you create account and database: follow step number 2.**
-* **GitHub Account** [[https://github.com/signup?source=login](https://github.com/signup?source=login)]** **
+**Frontend:**
+- React.js
+- Tailwind CSS
+- Axios
+
+**Backend:**
+- Node.js
+- Express.js
+- MongoDB Atlas
+
+**Security:**
+- JWT Authentication
+- Role-Based Access Control
 
 ---
+
+## Prerequisites
+
+Before running the application, make sure you have:
+
+- **Node.js** → [Download & Install](https://nodejs.org/en)
+- **Git** → [Download & Install](https://git-scm.com/)
+- **VS Code** → [Download & Install](https://code.visualstudio.com/)
+- **MongoDB Atlas Account** → [Sign Up](https://account.mongodb.com/account/login)
+- **GitHub Account** → [Sign Up](https://github.com/signup)

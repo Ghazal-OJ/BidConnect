@@ -5,11 +5,7 @@ const fs = require('fs');
 
 const router = express.Router();
 
-/**
- * Configure file storage:
- * - Saves files to the "uploads" folder (creates it if it doesn't exist)
- * - Renames file to: <timestamp>-<original-name-without-spaces>.<ext>
- */
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = path.join(process.cwd(), 'uploads');
