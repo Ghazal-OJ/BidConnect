@@ -1,8 +1,8 @@
 require('dotenv').config();
 
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+const express  = require('express');
+const cors     = require('cors');
+const path     = require('path');
 const mongoose = require('mongoose');
 
 const connectDB = require('./config/db');
@@ -13,13 +13,14 @@ const taskRoutes      = require('./routes/taskRoutes');
 const bidRoutes       = require('./routes/bidRoutes');
 const projectRoutes   = require('./routes/projectRoutes');
 const uploadsRouter   = require('./routes/uploads');          // file uploads (multer)
-const portfolioRoutes = require('./routes/portfolioRoutes');  // freelancer portfolioComingsoon
+const portfolioRoutes = require('./routes/portfolioRoutes');  // freelancer portfolio
 
 const app = express();
 
+/* ---------- Middleware ---------- */
 
 app.use(cors({ origin: true, credentials: true }));
-// JSON parser
+
 app.use(express.json({ limit: '10mb' }));
 
 
@@ -36,18 +37,18 @@ app.use('/api/portfolio', portfolioRoutes);
 // health check
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
-/* ---------- Start Server ---------- */
+/* ---------- Start Server (only when run directly) ---------- */
+const PORT = process.env.PORT || 5001;
+
 if (require.main === module) {
   connectDB()
     .then(() => {
-      
       mongoose.connection.once('open', () => {
         console.log('Mongo connected name:', mongoose.connection.name);
         console.log('Mongo host:', mongoose.connection.host);
       });
-
-      const PORT = process.env.PORT || 5001;
-      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+      
+      app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
     })
     .catch((err) => {
       console.error('MongoDB connection error:', err);
@@ -55,4 +56,6 @@ if (require.main === module) {
     });
 }
 
+
 module.exports = app;
+
