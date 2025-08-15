@@ -26,7 +26,6 @@ jobs:
       - name: Backend deps
         working-directory: backend
         run: yarn install
-
       - name: Frontend deps & build (if exists)
         if: ${{ hashFiles('frontend/package.json') != '' }}
         working-directory: frontend
@@ -49,8 +48,15 @@ jobs:
           rm -f .env
           printf "%s" "${{ secrets.PROD }}" > .env
 
-      - name: Start/Restart PM2 apps
+      - name: Deploy frontend to Nginx
+        if: ${{ hashFiles('frontend/package.json') != '' }}
+        run: |
+          sudo mkdir -p /var/www/bidconnect
+          sudo rm -rf /var/www/bidconnect/*
+          sudo cp -r frontend/build/* /var/www/bidconnect/
+          sudo systemctl reload nginx
+      - name: Start/Restart backend with PM2
         run: |
           pm2 start server.js --name backend --cwd ./backend || pm2 restart backend
-          if [ -f "frontend/package.json" ]; then pm2 start "pm2 serve ./frontend/build 3000 --spa" --name frontend || pm2 restart frontend; fi
           pm2 save
+
