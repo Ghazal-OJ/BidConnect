@@ -1,0 +1,56 @@
+name: BidConnect CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test_and_deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install global CLIs (pm2 + yarn)
+        run: npm i -g pm2 yarn
+
+      - name: Stop PM2 if running
+        run: pm2 stop all || true
+
+      - name: Backend deps
+        working-directory: backend
+        run: yarn install
+
+      - name: Frontend deps & build (if exists)
+        if: ${{ hashFiles('frontend/package.json') != '' }}
+        working-directory: frontend
+        run: |
+          rm -rf build
+          yarn install
+          yarn run build
+
+      - name: Run backend tests
+        working-directory: backend
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
+        run: npm test
+
+      - name: Write .env from secret
+        working-directory: backend
+        run: |
+          rm -f .env
+          printf "%s" "${{ secrets.PROD }}" > .env
+
+      - name: Start/Restart PM2 apps
+        run: |
+          pm2 start server.js --name backend --cwd ./backend || pm2 restart backend
+          if [ -f "frontend/package.json" ]; then pm2 start "pm2 serve ./frontend/build 3000 --spa" --name frontend || pm2 restart frontend; fi
+          pm2 save
