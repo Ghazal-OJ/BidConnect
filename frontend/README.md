@@ -1,70 +1,119 @@
-# Getting Started with Create React App
+# BidConnect Platform  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ **Overview**  
+BidConnect is a full-stack freelance project bidding platform designed to connect employers who have projects with freelancers looking for work.  
+It streamlines the process of posting projects, receiving competitive bids, and hiring the right talent — all in a secure, role-based environment.  
 
-## Available Scripts
+On the **employer side**, users can create detailed project listings with clear descriptions, budgets, and timelines. Employers can then review all bids submitted by freelancers, compare offers, and make informed hiring decisions.  
 
-In the project directory, you can run:
+On the **freelancer side**, users can browse available projects, submit tailored bids that include price, estimated delivery time, and a personalized cover letter. Freelancers can also view their own bid status for each project they’ve applied to.  
 
-### `npm start`
+The application is built with **React** for the frontend, **Node.js + Express** for the backend, and **MongoDB Atlas** for database storage.  
+Security is enforced using **JWT-based authentication** and **role-based access control (RBAC)**, ensuring that employers and freelancers have access only to the features relevant to their roles.  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+BidConnect’s clean and modern interface ensures ease of use, while backend validations and error handling provide a smooth and reliable user experience.  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## Features  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+🔹 **Employer**  
+- Sign Up / Login / Logout  
+- Create and publish projects  
+- Edit and delete own projects  
+- View all bids for a project  
 
-### `npm run build`
+🔹 **Freelancer**  
+- Sign Up / Login / Logout  
+- Browse available projects  
+- Submit bids with amount, delivery time, and cover letter   
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+##  Tech Stack  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Frontend:**  
+- React.js  
+- Tailwind CSS  
+- Axios  
 
-### `npm run eject`
+**Backend:**  
+- Node.js  
+- Express.js  
+- MongoDB Atlas  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Security:**  
+- JWT Authentication  
+- Role-Based Access Control (RBAC)  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Project Setup Instructions  
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. **Clone the repository:**  
+```bash
+git clone https://github.com/Ghazal-OJ/BidConnect.git
+cd BidConnect
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. **Install dependencies for backend and frontend:**
+```bash
+cd backend
+npm install
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+cd ../frontend
+npm install
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. **Run the application**
+```bash
+# Start backend
+cd backend
+npm start
 
-### Analyzing the Bundle Size
+# Start frontend
+cd ../frontend
+npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Public URL 
+ http://13.210.241.10
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+ ---
 
-### Advanced Configuration
+ **Test Accounts**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+# Employer
 
-### Deployment
+Email: ghazal98test@gmail.com
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Password: Test@123
 
-### `npm run build` fails to minify
+#Freelancer
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Email: gh1999test@gmail.com
+
+Password: Test@123123
+
+---
+
+##Repository Structure
+
+BidConnect/
+│── backend/          # Node.js + Express backend
+│── frontend/         # React frontend
+│── README.md         # Project documentation
+│── package.json      # Project configs
+
+---
+
+**Notes**
+
+**Ensure Node.js and npm are installed.
+
+**Ensure MongoDB Atlas connection string is correctly set in the .env file.
+
+**Instructor can log in using the provided test accounts.
