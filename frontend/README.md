@@ -1,119 +1,103 @@
-# BidConnect Platform  
+# BidConnect Frontend
 
- **Overview**  
-BidConnect is a full-stack freelance project bidding platform designed to connect employers who have projects with freelancers looking for work.  
-It streamlines the process of posting projects, receiving competitive bids, and hiring the right talent — all in a secure, role-based environment.  
+## Overview
+The **frontend** of BidConnect is built with **React.js** and styled using **Tailwind CSS**.  
+It provides a clean and modern user interface for both **employers** and **freelancers**, allowing them to interact with the backend APIs in a seamless way.
 
-On the **employer side**, users can create detailed project listings with clear descriptions, budgets, and timelines. Employers can then review all bids submitted by freelancers, compare offers, and make informed hiring decisions.  
-
-On the **freelancer side**, users can browse available projects, submit tailored bids that include price, estimated delivery time, and a personalized cover letter. Freelancers can also view their own bid status for each project they’ve applied to.  
-
-The application is built with **React** for the frontend, **Node.js + Express** for the backend, and **MongoDB Atlas** for database storage.  
-Security is enforced using **JWT-based authentication** and **role-based access control (RBAC)**, ensuring that employers and freelancers have access only to the features relevant to their roles.  
-
-BidConnect’s clean and modern interface ensures ease of use, while backend validations and error handling provide a smooth and reliable user experience.  
+Employers can create and manage projects, while freelancers can browse projects and submit bids — all within a responsive web application.
 
 ---
 
-## Features  
+## Features
+- **Employer Side**
+  - Login, Register, Logout
+  - Create, edit, and delete projects
+  - View all freelancer bids for a project  
 
-🔹 **Employer**  
-- Sign Up / Login / Logout  
-- Create and publish projects  
-- Edit and delete own projects  
-- View all bids for a project  
+- **Freelancer Side**
+  - Login, Register, Logout
+  - Browse projects
+  - Submit and edit bids before acceptance
+  - Track bid status  
 
-🔹 **Freelancer**  
-- Sign Up / Login / Logout  
-- Browse available projects  
-- Submit bids with amount, delivery time, and cover letter   
-
----
-
-##  Tech Stack  
-
-**Frontend:**  
-- React.js  
-- Tailwind CSS  
-- Axios  
-
-**Backend:**  
-- Node.js  
-- Express.js  
-- MongoDB Atlas  
-
-**Security:**  
-- JWT Authentication  
-- Role-Based Access Control (RBAC)  
+- **General**
+  - JWT Authentication integrated with backend
+  - Role-based access UI rendering
+  - Responsive design using Tailwind CSS
 
 ---
 
-## Project Setup Instructions  
+## Tech Stack
+- **React.js**
+- **Tailwind CSS**
+- **Axios** (for backend API calls)
+- **React Router DOM**
 
-1. **Clone the repository:**  
+---
+
+## Setup Instructions
+
+1. Navigate to the frontend folder:
 ```bash
-git clone https://github.com/Ghazal-OJ/BidConnect.git
-cd BidConnect
+cd frontend
+```
 
----
-
-2. **Install dependencies for backend and frontend:**
+2. Install dependencies:
 ```bash
-cd backend
 npm install
+```
 
-cd ../frontend
-npm install
-
----
-
-3. **Run the application**
+3. Start the development server:
 ```bash
-# Start backend
-cd backend
 npm start
+```
 
-# Start frontend
-cd ../frontend
-npm start
-
----
-
-## Public URL 
- http://13.210.241.10
-
- ---
-
- **Test Accounts**
-
-# Employer
-
-Email: ghazal98test@gmail.com
-
-Password: Test@123
-
-#Freelancer
-
-Email: gh1999test@gmail.com
-
-Password: Test@123123
+The app will be available at:
+```
+http://localhost:3000
+```
 
 ---
 
-##Repository Structure
+## Backend Connection
+The frontend communicates with the backend (`Node.js + Express`) through REST APIs.  
+Make sure the **backend server is running** before using the frontend.  
 
-BidConnect/
-│── backend/          # Node.js + Express backend
-│── frontend/         # React frontend
-│── README.md         # Project documentation
-│── package.json      # Project configs
+In your `.env` file (inside `frontend/`), configure the API endpoint:
+```
+REACT_APP_API_URL=http://localhost:5000
+```
+
+For production (deployed version), update this URL to your EC2 public IP:
+```
+REACT_APP_API_URL=http://13.210.241.10
+```
 
 ---
 
-**Notes**
+## Project Structure
+```
+frontend/
+│── public/              # Static files
+│── src/
+│   ├── components/      # Reusable UI components
+│   ├── pages/           # Application pages (Login, Register, Projects, etc.)
+│   ├── assets/          # Images, logos
+│   ├── App.js           # Root component
+│   └── index.js         # Entry point
+│── package.json
+│── README.md            # Frontend documentation
+```
 
-**Ensure Node.js and npm are installed.
+---
 
-**Ensure MongoDB Atlas connection string is correctly set in the .env file.
+## Test Accounts
+Use these credentials to log in through the frontend UI:
 
-**Instructor can log in using the provided test accounts.
+### Employer
+- **Email:** `ghazal98test@gmail.com`  
+- **Password:** `Test@123`
+
+### Freelancer
+- **Email:** `gh1999test@gmail.com`  
+- **Password:** `Test@123123`
