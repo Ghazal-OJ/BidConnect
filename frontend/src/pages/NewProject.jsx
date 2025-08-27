@@ -109,3 +109,5 @@ export default function NewProject() {
     </div>
   );
 }
+// FPBP-14: Added log for testing project posting feature
+
